@@ -54,16 +54,7 @@ const SignIn = () => {
                     alignItems: 'center',
                     justifyContent: 'center'
                 }}>
-                    <Paper elevation={3} sx={{
-                        p: 4,
-                        width: '100%',
-                        height: '700px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}>
-                        <SuccessAnimation />
-                    </Paper>
+                   <SuccessAnimation />
                 </Box>
             </Container>
         );

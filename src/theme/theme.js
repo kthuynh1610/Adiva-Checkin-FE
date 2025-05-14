@@ -17,6 +17,11 @@ export const theme = createTheme({
       secondary: '#666666',
     },
   },
+  transitions: {
+    duration: {
+      enteringScreen: 500,  // Duration for entering animations (in milliseconds)
+    },
+  },
   components: {
     MuiButton: {
       styleOverrides: {
@@ -48,6 +53,33 @@ export const theme = createTheme({
           },
           '& .MuiInput-underline:after': {
             borderBottomColor: '#19bfb7'
+          }
+        }
+      }
+    },
+    MuiSlide: {
+      defaultProps: {
+        timeout: {
+          enter: 500,
+          exit: 300,
+        },
+      },
+    },
+    MuiSvgIcon: {
+      styleOverrides: {
+        root: {
+          '@keyframes scaleUp': {
+            '0%': {
+              transform: 'scale(0)',
+              opacity: 0
+            },
+            '50%': {
+              transform: 'scale(1.2)',
+            },
+            '100%': {
+              transform: 'scale(1)',
+              opacity: 1
+            }
           }
         }
       }
