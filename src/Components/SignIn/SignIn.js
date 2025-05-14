@@ -1,109 +1,162 @@
-import logo from '../../assets/logo.png';
 import { useState } from 'react';
-import './SignIn.css'
-import {useLocation} from 'react-router-dom';
-const SignIn = () =>{
-    //const [name, setName] = useState('');
-    const {state} = useLocation();
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Box, TextField, Container, Paper, Typography, Button, Slide } from '@mui/material';
+import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md';
+import React from 'react';
+import logo from '../../assets/logo.png';
+import SuccessAnimation from '../Common/SuccessAnimation';
+
+const SignIn = () => {
+    const navigate = useNavigate();
+    const { state } = useLocation();
     const name = state;
     const [email, setEmail] = useState('');
     const [phoneNumber, setNumber] = useState('');
     const [doin, setDoin] = useState('');
     const [birthday, setBirthday] = useState('');
     const [status, setStatus] = useState(false);
-    const addUsers = async () =>{
-        await fetch('http://localhost:8800/users/createUser',{
-            method: 'post',
-            body: JSON.stringify({
-                name: name,
-                email: email,
-                phoneNumber : phoneNumber,
-                freetext : doin,
-                birthday: birthday,
-            }),
-            headers:{
-                'Content-type': "application/json; charset=UTF-8",
-            }
-        })
-        .then((res)=>res.json())
-        .then((data)=>{
-            console.log(data)
-        })
-        // .then(()=>{setStatus(true)})
-        .catch(err=>{
-            console.log("Error" + err)
-        })
-     }
-    const handleSubmit = (e) =>{
+    const [checked, setChecked] = useState(false);
+
+    React.useEffect(() => {
+        setChecked(true);
+    }, []);
+
+    const addUsers = async () => {
+        try {
+            const response = await fetch('http://localhost:8800/users/createUser', {
+                method: 'post',
+                body: JSON.stringify({
+                    name, email, phoneNumber, freetext: doin, birthday,
+                }),
+                headers: {
+                    'Content-type': "application/json; charset=UTF-8",
+                }
+            });
+            const data = await response.json();
+            console.log(data);
+            setStatus(true);
+        } catch (err) {
+            console.log("Error", err);
+        }
+    };
+
+    const handleSubmit = (e) => {
         e.preventDefault();
-        addUsers( name, email, phoneNumber, doin, birthday);
+        addUsers();
+    };
+
+    if (status) {
+        return (
+            <Container maxWidth="sm">
+                <Box sx={{
+                    minHeight: '100vh',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                    <Paper elevation={3} sx={{
+                        p: 4,
+                        width: '100%',
+                        height: '700px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
+                        <SuccessAnimation />
+                    </Paper>
+                </Box>
+            </Container>
+        );
     }
-    const LoadingScreen = () => {
-        return(
-            <div class="wrapper"> 
-                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"> 
-                <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/> 
-                <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>  
-                </svg>
-                <h1>Thank you for checked in</h1>
-            </div>
-        )
-    }
-    const signIn = () =>{
-        return(
-            <div className='containerSignIn'>
-            <img src={logo} alt="logo" style={{width: '400px'}}/>
-            <div className='form'>
-                <form onSubmit={handleSubmit}>
-                     {/* {<label for="Name"> Your Full Name : <br/>
-                      <input 
-                      id="full-name" 
-                      name="full-name" 
-                      type="text" 
-                      required
-                      onChange={(e)=>setName(e.target.value)}/>
-                    </label> */}
-                    <label for="email"> Email Address : <br/>
-                      <input 
-                      id="email-address" 
-                      name="email-address" 
-                      type="text" 
-                      required
-                      onChange={(e)=>setEmail(e.target.value)}/>
-                    </label>
-                    <label for="number"> Phone Number :<br/> 
-                        <input
-                         id="phone-number" 
-                         name="phone-number" 
-                         type="number" 
-                         required
-                         onChange={(e)=>setNumber(e.target.value)}/>
-                    </label>
-                    <label for="text"> What are you doing today : <br/> 
-                        <input 
-                        id="doing" 
-                        name="doing" 
-                        type="text"
-                        onChange={(e)=>setDoin(e.target.value)}/> 
-                    </label>
-                    <label for="birthday"> Your birthday : 
-                        <br/> <input 
-                        id="birthday" 
-                        name="birthday" 
-                        type="date"
-                        onChange={(e)=>setBirthday(e.target.value)}/>
-                    </label>
-                    <button className='buttonButton' type='submit'>Next</button>
-                </form>
-            </div>
-        </div>
-        )
-    }
-    return(
-        <div>
-        {status ? LoadingScreen() : signIn() }
-        </div>
-    )
-}
+
+    return (
+        <Container maxWidth="sm">
+            <Button 
+                variant="contained"
+                onClick={() => navigate('/')}
+                sx={{ 
+                    position: 'absolute', 
+                    top: 20, 
+                    left: 20,
+                    padding: '10px 30px',
+                    color: 'white',
+                    width: '100px',
+                    height: '60px', 
+                }}
+            >
+                <MdArrowBackIos />
+            </Button>
+            <Slide direction="left" in={checked} mountOnEnter unmountOnExit>
+                <Box sx={{
+                    minHeight: '100vh',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                    <Paper elevation={3} sx={{
+                        p: 4,
+                        width: '100%',
+                        height: '700px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
+                        <Box component="form" onSubmit={handleSubmit} sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 3,
+                            width: '100%',
+                            maxWidth: '500px'
+                        }}>
+                            <Box component="img" src={logo} alt="logo" sx={{ width: '400px', alignSelf: 'center', mb: 3 }} />
+                            
+                            <TextField
+                                label="Email Address"
+                                required
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                            
+                            <TextField
+                                label="Phone Number"
+                                type="number"
+                                required
+                                onChange={(e) => setNumber(e.target.value)}
+                            />
+                            
+                            <TextField
+                                label="What are you doing today?"
+                                onChange={(e) => setDoin(e.target.value)}
+                            />
+                            
+                            <TextField
+                                type="date"
+                                label="Your birthday"
+                                InputLabelProps={{ shrink: true }}
+                                onChange={(e) => setBirthday(e.target.value)}
+                            />
+
+                            <Button 
+                                variant="contained"
+                                type="submit"
+                                sx={{
+                                    borderRadius: 2,
+                                    padding: '10px 30px',
+                                    color: 'white',
+                                    height: '60px',
+                                    fontSize: '20px',
+                                    textTransform: 'uppercase',
+                                    backgroundColor: "#19bfb7",
+                                    alignSelf: 'center'
+                                }}
+                            >
+                                Next <MdArrowForwardIos style={{ marginLeft: '8px' }}/>
+                            </Button>
+                        </Box>
+                    </Paper>
+                </Box>
+            </Slide>
+        </Container>
+    );
+};
 
 export default SignIn;
