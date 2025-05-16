@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, TextField, Container, Paper, Typography, Button, Slide } from '@mui/material';
 import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md';
 import React from 'react';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import logo from '../../assets/logo.png';
 import SuccessAnimation from '../Common/SuccessAnimation';
 
@@ -98,7 +99,7 @@ const ReloadData = () => {
                     height: '60px', 
                 }}
             >
-                <MdArrowBackIos />
+                <ArrowBackIcon />
             </Button>
             <Slide direction="left" in={checked} mountOnEnter unmountOnExit>
                 <Box sx={{

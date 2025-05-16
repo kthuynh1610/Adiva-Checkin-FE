@@ -5,6 +5,7 @@ import { Box, TextField, IconButton, Container, Paper, Typography, Button, Slide
 import { MdArrowForwardIos, MdArrowBackIos } from 'react-icons/md';
 import logo from '../../assets/logo.png';
 import React from 'react';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const NameFilled = () => {
     const navigate = useNavigate();
@@ -56,7 +57,7 @@ const NameFilled = () => {
                     width: '100px',
                     height: '60px', }}
             >
-                <MdArrowBackIos />
+                <ArrowBackIcon />
             </Button>
             <Slide direction="left" in={checked} mountOnEnter unmountOnExit>
                 <Box
