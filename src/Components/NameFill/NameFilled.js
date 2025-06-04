@@ -1,5 +1,5 @@
 //import {Link} from 'react-router-dom';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {useNavigate} from "react-router-dom";
 import { Box, TextField, IconButton, Container, Paper, Typography, Button, Slide } from '@mui/material';
 import { MdArrowForwardIos, MdArrowBackIos } from 'react-icons/md';
@@ -11,9 +11,14 @@ const NameFilled = () => {
     const navigate = useNavigate();
     const [name, setName] = useState('');
     const [checked, setChecked] = useState(false);  // For controlling the slide animation
+    const [error, setError] = useState(false);
 
-    // Start the animation after component mounts
-    React.useEffect(() => {
+    const validateName = (name) => {
+        const nameRegex = /^[a-zA-ZÀ-ÖØ-öø-ÿ]+([ '-][a-zA-ZÀ-ÖØ-öø-ÿ]+)+$/;
+        return nameRegex.test(name.trim());
+    }
+
+    useEffect(() => {
         setChecked(true);
     }, []);
 
@@ -44,6 +49,12 @@ const NameFilled = () => {
     const handleSubmitName = (e) => {
         e.preventDefault();
         checkUser();
+    };
+
+    const handleNameChange = (e) => {
+        const value = e.target.value;
+        setName(value);
+        setError(value.trim() !== '' && !validateName(value));
     };
 
     return (
@@ -104,7 +115,9 @@ const NameFilled = () => {
                                             borderBottomColor: '#19bfb7'
                                         }
                                     }}
-                                    onChange={(e) => setName(e.target.value)}
+                                    onChange={handleNameChange}
+                                    error={error}
+                                    helperText={error ? 'Please enter your full name (first and last).' : ''}
                                 />
                             </Box>
                             
@@ -122,6 +135,8 @@ const NameFilled = () => {
                                         textTransform: 'uppercase',
                                         cursor: 'pointer',
                                         backgroundColor: "#19bfb7",
+                                        opacity: error ? 0.5 : 1,
+                                        pointerEvents: error ? 'none' : 'auto',
                                     }}
                                     type="submit"
                                 >
